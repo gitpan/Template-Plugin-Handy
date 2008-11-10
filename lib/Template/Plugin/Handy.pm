@@ -7,11 +7,13 @@ use Carp;
 use Data::Dump;
 use JSON::XS;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 our @SCALAR_OPS = our @LIST_OPS = our @HASH_OPS
     = qw( as_json dump_stderr dump_data );
 push( @SCALAR_OPS, qw( increment decrement ) );
+push( @LIST_OPS,   qw( sort_by ) );
+push( @HASH_OPS,   qw( sort_by ) );
 
 =head1 NAME
 
@@ -130,6 +132,35 @@ Aliased as a scalar vmethod as 'dec'.
 sub decrement {
     $_[0]--;
     return;
+}
+
+=head2 sort_by( I<method_name> )
+
+Sort an array or hash ref of objects according to I<method_name>. The
+sort assumes a C<cmp> comparison and the return value of I<method_name>
+is run through lc() first.
+
+Returns a new sorted arrayref.
+
+=cut
+
+sub sort_by {
+    my $stuff  = shift;
+    my $method = shift;
+    if ( ref $stuff eq 'HASH' ) {
+        return [
+            sort {
+                lc( $stuff->{$a}->$method ) cmp lc( $stuff->{$b}->$method )
+                } keys %$stuff
+        ];
+    }
+    elsif ( ref $stuff eq 'ARRAY' ) {
+        return [ sort { lc( $a->$method ) cmp lc( $b->$method ) } @$stuff ];
+    }
+    else {
+        croak "sort_by only works with ARRAY or HASH references";
+    }
+
 }
 
 1;

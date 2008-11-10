@@ -3,3 +3,6 @@ Revision history for Template-Plugin-Handy
 0.001   10 Oct 2008
         First version, released on an unsuspecting world.
 
+0.002   10 Nov 2008
+        * add sort_by method to LIST and HASH ops
+
