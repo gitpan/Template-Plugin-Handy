@@ -7,7 +7,7 @@ use Carp;
 use Data::Dump;
 use JSON::XS;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 our @SCALAR_OPS = our @LIST_OPS = our @HASH_OPS
     = qw( as_json dump_stderr dump_data );
@@ -156,6 +156,11 @@ sub sort_by {
     }
     elsif ( ref $stuff eq 'ARRAY' ) {
         return [ sort { lc( $a->$method ) cmp lc( $b->$method ) } @$stuff ];
+    }
+    elsif ( ref $stuff ) {
+
+        # might be a single blessed object
+        return $stuff;
     }
     else {
         croak "sort_by only works with ARRAY or HASH references";

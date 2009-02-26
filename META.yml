@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Template-Plugin-Handy
-version:             0.002
+version:             0.003
 abstract:            handy vmethods for Template Toolkit
 license:             perl
 author:              
